@@ -14,8 +14,6 @@ const max int = 9
 const min int = 4
 
 func CalcPattern(filename string) {
-	runtime.GOMAXPROCS(runtime.NumCPU())
-
 	hash, err := ioutil.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err)
