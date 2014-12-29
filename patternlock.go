@@ -5,21 +5,13 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"github.com/kokardy/listing"
-	"io/ioutil"
-	"log"
 	"runtime"
 )
 
 const max int = 9
 const min int = 4
 
-func CalcPattern(filename string) {
-	hash, err := ioutil.ReadFile(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("Hash Key : %x\n", hash)
-
+func Calc(hash []byte) []byte {
 	list := ByteReplacer([]byte{0, 1, 2, 3, 4, 5, 6, 7, 8})
 	buf := runtime.NumCPU()
 
@@ -28,19 +20,19 @@ func CalcPattern(filename string) {
 			pattern := ByteReplacer(p.(ByteReplacer))
 			tmp := sha1.Sum(pattern)
 			if bytes.Equal(hash, tmp[:]) {
-				fmt.Println("Pattern  : ", pattern)
-				printResult(pattern)
-				return
+				return pattern
 			}
 		}
 	}
+	return []byte{}
 }
 
-func printResult(res []byte) {
+func PrintResult(res []byte) {
 	var ary [9]int
 	for idx, val := range res {
 		ary[int(val)] = idx + 1
 	}
+	fmt.Println("Pattern  : ", res)
 	fmt.Println(" --- --- ---")
 	fmt.Println("|", ary[0], "|", ary[1], "|", ary[2], "|")
 	fmt.Println(" ---+---+---")
